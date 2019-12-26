@@ -1,6 +1,3 @@
-<<<<<<< HEAD
-
-=======
 from moviepy.editor import VideoFileClip
 import os
 import time
@@ -72,4 +69,3 @@ if __name__ == "__main__":
     p2.join()
 
     # later code is to classify the elements
->>>>>>> idris
