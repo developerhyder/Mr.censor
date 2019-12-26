@@ -1,3 +1,5 @@
+#old redundant code
+# you gotta do what you gotta do to have a backup
 from moviepy.editor import VideoFileClip
 from moviepy.video.io.ffmpeg_tools import ffmpeg_extract_subclip
 import os
