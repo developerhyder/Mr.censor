@@ -1,12 +1,31 @@
 from moviepy.editor import VideoFileClip
 import os
 import time
-from utils.clrs import welcome
 from nudenet import NudeClassifier
 import multiprocessing
-from utils.cut import image_cut
-from utils.clsfy import cls_fr
-from utils.clrs import color
+
+
+def cut(path, start, end, step):
+    clip = VideoFileClip(path)
+    for x in range(start, end, step):
+        # need to do os.mkdir
+        fname = "../temp/"+str(x)+".jpeg"
+        print(fname)
+        clip.save_frame(fname, t=x)
+    print("it is done")
+
+def clsfy(location, classifier):
+    # this method is to classify the frames
+    data = classifier.classify(location)
+    print("frame: ",location,"safe :",data[location]['safe'])
+
+    #change this variable as per the accuracy of the mode
+    how_safe = 0.4
+
+    if data[location]['safe'] < how_safe:
+        return False
+    else:
+        return True
 
 def lop(lis, classifier, location, info_lis):
     for x in lis:
@@ -15,19 +34,14 @@ def lop(lis, classifier, location, info_lis):
 
 if __name__ == "__main__":
 
-    welcome.welc()
     # and the main begins
-    started_at = time.time()
-    color.red("The main started at "+str(time.ctime()))
+    print("The main started at", time.ctime())
 
-    var = input(color.green_str("Enter the path (for now type something): "))
-
-    #later on clip_loc = var
     clip_loc = "/root/tvf/got.mp4"
 
     vclip = VideoFileClip(clip_loc)
-    color.red("The duration of the clip : " + str(vclip.duration))
-    color.red("FPS :" + str(vclip.fps))
+    print("The duration of the clip : ", vclip.duration)
+    print("FPS :", vclip.fps)
 
     duration = int(vclip.duration)
 
@@ -39,41 +53,19 @@ if __name__ == "__main__":
     print("Main process : ",os.getpid())
 
     start = 0
-    end = int(duration/4)
-    step = 5
-    p1 = multiprocessing.Process(target=image_cut.cut, args=(clip_loc, start, end, step, ))
-    start = int(duration/4)
     end = int(duration/2)
-    p2 = multiprocessing.Process(target=image_cut.cut, args=(clip_loc, start, end, step))
-
+    step = 5
+    p1 = multiprocessing.Process(target=cut, args=(clip_loc, start, end, step, ))
     start = int(duration/2)
-    end = int(duration/1.33)
-    p3 = multiprocessing.Process(target=image_cut.cut, args=(clip_loc, start, end, step))
-
-    start = int(duration/1.33)
     end = duration
-    p4 = multiprocessing.Process(target=image_cut.cut, args=(clip_loc, start, end, step))
+    p2 = multiprocessing.Process(target=cut, args=(clip_loc, start, end, step))
 
     p1.start()
     p2.start()
-    p3.start()
-    p4.start()
 
-
-    color.green("p1 : "+str(p1.pid)+"p2 :"+str(p2.pid))
+    print("p1 :",p1.pid,"p2 :",p2.pid)
 
     p1.join()
     p2.join()
-    p3.join()
-    p4.join()
 
-    stopped_at = time.time()
-
-    color.red("The time elapsed : "+str(stopped_at - started_at))
-
-<<<<<<< HEAD
-    # later code is to classify the element
-=======
-    
     # later code is to classify the elements
->>>>>>> idris
