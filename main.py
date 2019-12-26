@@ -68,5 +68,4 @@ if __name__ == "__main__":
     p1.join()
     p2.join()
 
-    # later code is to classify the elements
->>>>>>> idris
+    # later code is to classify the element
