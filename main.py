@@ -11,7 +11,7 @@ from utils.clrs import color
 
 def lop(lis, classifier, location, info_lis):
     for x in lis:
-        if clsfy(loc, classifier):
+        if cls_fr.clsfy(loc, classifier):
             info_lis.append(loc)
 
 if __name__ == "__main__":
