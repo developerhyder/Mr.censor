@@ -1,6 +1,3 @@
-<<<<<<< HEAD
-#hello there
-=======
 from moviepy.editor import VideoFileClip
 import os
 import time
