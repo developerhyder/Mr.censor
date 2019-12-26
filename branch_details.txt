@@ -1,3 +1,33 @@
 This branch is the main branch at the end of the day all the branches need to converge here.
 This branch will have production ready code
 Note: Do not play with this branch
+
+The work flow
+-folder
+  >main.py
+  >packages
+    ->code written for the packages
+  >../detector
+  >../classifier
+  >(video can be in your custom location)
+
+
+main.py (driver code)
+packages (individual features that will be developed later on)
+
+I will not put detector and classifier model online as it is network heavy(for me)
+I will provide the links for them
+
+classifier:
+  >https://github.com/bedapudi6788/NudeNet-models/blob/master/v1/classifier_model
+
+detector:
+  >https://github.com/bedapudi6788/NudeNet-models/blob/master/v1/detector_model
+
+  dependencies:
+
+  >moviepy (pip install moviepy)
+  >opencv (follow thier documentation)
+  >tensorflow (follow their documentation)
+  >NudeNet (pip install nudenet)
+  >github (for version control obviously)
