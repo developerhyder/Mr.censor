@@ -8,6 +8,7 @@ from utils.cut import image_cut
 from utils.clsfy import cls_fr
 from utils.clrs import color
 
+
 def lop(lis, classifier, location, info_lis):
     for x in lis:
         if clsfy(loc, classifier):
@@ -71,5 +72,6 @@ if __name__ == "__main__":
 
     color.red("The time elapsed : "+str(stopped_at - started_at))
 
-    
+#need to write 
+
     # later code is to classify the elements
