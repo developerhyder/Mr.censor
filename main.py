@@ -11,18 +11,21 @@ from utils.clrs import color
 def clsfy(location, classifier):
     # this method is to classify the frames
     data = classifier.classify(location)
-    color.green("frame: "+str(location)+" safe : "+str(data[location]['safe']))
+
 
     #change this variable as per the accuracy of the mode
     how_safe = 0.4
 
     if data[location]['safe'] < how_safe:
+        color.red("frame: "+ str(location) + " safe: "+str(data[location]['safe']))
         return False
     else:
+        color.green("frame: "+str(location)+" safe : "+str(data[location]['safe']))
         return True
 
 def lop(lis, classifier, location, info_lis):
     for x in lis:
+        loc = location + str(x)
         if clsfy(loc, classifier):
             info_lis.append(loc)
 
@@ -30,6 +33,7 @@ if __name__ == "__main__":
 
     welcome.welc()
     # and the main begins
+
     started_at = time.time()
     color.red("The main started at "+str(time.ctime()))
 
@@ -81,8 +85,18 @@ if __name__ == "__main__":
     p4.join()
 
     stopped_at = time.time()
+    # later code is to classify the elements
 
     color.red("The time elapsed : "+str(stopped_at - started_at))
+    started_at = time.time()
+    color.yellow("\n\n--->The classification started  : "+str(started_at))
+    classifier = NudeClassifier("../classifier_model")
 
+    img_lis = os.listdir('../temp/')
+    info_lis = []
 
-    # later code is to classify the elements
+    lop(img_lis, classifier, '../temp/', info_lis)
+
+    stopped_at = time.time()
+    color.yellow("\n\n---> classification took : "+str(stopped_at-started_at))
+    
