@@ -1,5 +1,5 @@
 from moviepy.editor import VideoFileClip
-import os
+import shutil, os
 import time
 from utils.clrs import welcome
 from nudenet import NudeClassifier
@@ -18,16 +18,19 @@ def clsfy(location, classifier):
 
     if data[location]['safe'] < how_safe:
         color.red("frame: "+ str(location) + " safe: "+str(data[location]['safe']))
+        shutil.move(location, '../tmp')
         return False
     else:
         color.green("frame: "+str(location)+" safe : "+str(data[location]['safe']))
         return True
 
-def lop(lis, classifier, location, info_lis):
+def lop(lis, classifier, location):
+    info_lis= []
     for x in lis:
         loc = location + str(x)
         if clsfy(loc, classifier):
             info_lis.append(loc)
+    return info_lis
 
 if __name__ == "__main__":
 
@@ -95,8 +98,10 @@ if __name__ == "__main__":
     img_lis = os.listdir('../temp/')
     info_lis = []
 
-    lop(img_lis, classifier, '../temp/', info_lis)
+    info_lis = lop(img_lis, classifier, '../temp/')
 
     stopped_at = time.time()
     color.yellow("\n\n---> classification took : "+str(stopped_at-started_at))
-    
+
+    # for f in info_lis:
+    #     shutil.move(f, '../tmp')
