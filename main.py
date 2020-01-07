@@ -14,7 +14,7 @@ def clsfy(location, classifier):
 
 
     #change this variable as per the accuracy of the mode
-    how_safe = 0.4
+    how_safe = 0.2
 
     if data[location]['safe'] < how_safe:
         color.red("frame: "+ str(location) + " safe: "+str(data[location]['safe']))
@@ -103,5 +103,4 @@ if __name__ == "__main__":
     stopped_at = time.time()
     color.yellow("\n\n---> classification took : "+str(stopped_at-started_at))
 
-    # for f in info_lis:
-    #     shutil.move(f, '../tmp')
+    #once all the potential frames are in the
