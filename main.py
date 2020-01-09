@@ -11,8 +11,6 @@ from utils.clrs import color
 def clsfy(location, classifier):
     # this method is to classify the frames
     data = classifier.classify(location)
-
-
     #change this variable as per the accuracy of the mode
     how_safe = 0.2
 
@@ -104,3 +102,10 @@ if __name__ == "__main__":
     color.yellow("\n\n---> classification took : "+str(stopped_at-started_at))
 
     #info_lis has all the potential nsfw frames
+    print(info_lis)
+    frame_values = []
+    for img_loc in info_lis:
+        #frame_sec is to get the second on which the frame was retrieved
+        frame_values.append(image_cut.frame_sec(x))
+
+    print(frame_values)
