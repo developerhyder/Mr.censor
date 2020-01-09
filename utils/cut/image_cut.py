@@ -16,4 +16,4 @@ def frame_sec(str_val):
     if not x:
         return None
     else:
-        return x[0]
+        return int(x[0])
