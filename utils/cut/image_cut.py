@@ -13,4 +13,7 @@ def cut(path, start, end, step):
 
 def frame_sec(str_val):
     x = re.findall("\d+",str_val)
-    return x[0]
+    if not x:
+        return None
+    else:
+        return x[0]

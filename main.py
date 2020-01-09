@@ -106,6 +106,11 @@ if __name__ == "__main__":
     frame_values = []
     for img_loc in info_lis:
         #frame_sec is to get the second on which the frame was retrieved
-        frame_values.append(image_cut.frame_sec(x))
+        #handle exceptions here
+        x = image_cut.frame_sec(img_loc)
+        if x == None:
+            pass
+        else:
+            frame_values.append(x)
 
     print(frame_values)
