@@ -18,11 +18,11 @@ def clsfy(location, classifier):
 
     if data[location]['safe'] < how_safe:
         color.red("frame: "+ str(location) + " safe: "+str(data[location]['safe']))
-        shutil.move(location, '../tmp')
-        return False
+        #shutil.move(location, '../tmp')
+        return True
     else:
         color.green("frame: "+str(location)+" safe : "+str(data[location]['safe']))
-        return True
+        return False
 
 def lop(lis, classifier, location):
     info_lis= []
@@ -103,4 +103,4 @@ if __name__ == "__main__":
     stopped_at = time.time()
     color.yellow("\n\n---> classification took : "+str(stopped_at-started_at))
 
-    #once all the potential frames are in the
+    #info_lis has all the potential nsfw frames
