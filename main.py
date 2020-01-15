@@ -8,11 +8,11 @@ from utils.cut import image_cut
 from utils.clrs import color
 #adding a comment
 
-def clsfy(location, classifier):
+def clsfy(location, classifier, how_safe):
     # this method is to classify the frames
     data = classifier.classify(location)
     #change this variable as per the accuracy of the mode
-    how_safe = 0.2
+
 
     if data[location]['safe'] < how_safe:
         color.red("frame: "+ str(location) + " safe: "+str(data[location]['safe']))
@@ -26,9 +26,28 @@ def lop(lis, classifier, location):
     info_lis= []
     for x in lis:
         loc = location + str(x)
-        if clsfy(loc, classifier):
+        if clsfy(loc, classifier, 0.2):
             info_lis.append(loc)
     return info_lis
+def cals(frame, classifier, vclip):
+    vclip.save_frame("../accu/"+str(frame)+"-0.jpeg", t=frame)
+    vclip.save_frame("../accu/"+str(frame)+"-1.jpeg", t=frame+0.1)
+    vclip.save_frame("../accu/"+str(frame)+"-2.jpeg", t=frame+0.2)
+    vclip.save_frame("../accu/"+str(frame)+"-3.jpeg", t=frame+0.5)
+    vclip.save_frame("../accu/"+str(frame)+"-4.jpeg", t=frame+0.7)
+    vclip.save_frame("../accu/"+str(frame)+"-5.jpeg", t=frame+0.9)
+
+    caliberate = 0
+    for x in range(6):
+        loc = "../accu/"+str(frame)+"-"+str(x)+".jpeg"
+        if clsfy(loc, classifier, 0.1):
+            caliberate += 1
+
+    if (caliberate/6) > 0.5:
+        return True
+    else:
+        return False
+
 
 if __name__ == "__main__":
 
@@ -114,3 +133,25 @@ if __name__ == "__main__":
             frame_values.append(x)
 
     print(frame_values)
+
+    # now we need to select the frames which are potentially nsfw
+
+    try:
+        os.mkdir("../accu/")
+    except:
+        pass
+
+    try:
+        os.mkdir("../final/")
+    except:
+        pass
+
+    updated_info_lis= []
+    for frame in frame_values:
+        if cals(frame, classifier, vclip):
+            updated_info_lis.append(frame)
+
+    for frm in updated_info_lis:
+        vclip.save_frame("../final/"+str(frm)+".jpeg", t=frm)
+
+    print("It is done")
