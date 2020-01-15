@@ -8,11 +8,6 @@ from utils.cut import image_cut
 from utils.clrs import color
 #adding a comment
 
-<<<<<<< HEAD
-
-
-def lop(lis, classifier, location, info_lis):
-=======
 def clsfy(location, classifier, how_safe):
     # this method is to classify the frames
     data = classifier.classify(location)
@@ -29,7 +24,6 @@ def clsfy(location, classifier, how_safe):
 
 def lop(lis, classifier, location):
     info_lis= []
->>>>>>> test_running
     for x in lis:
         loc = location + str(x)
         if clsfy(loc, classifier, 0.2):
@@ -118,16 +112,6 @@ if __name__ == "__main__":
     color.yellow("\n\n--->The classification started  : "+str(started_at))
     classifier = NudeClassifier("../classifier_model")
 
-<<<<<<< HEAD
-#need to write 
-
-<<<<<<< HEAD
-#need to write
-
-=======
->>>>>>> 931f3d78c7f7d3c4b3f583ab3c3cdb19559ac4a7
-    # later code is to classify the elements
-=======
     img_lis = os.listdir('../temp/')
     info_lis = []
 
@@ -171,4 +155,3 @@ if __name__ == "__main__":
         vclip.save_frame("../final/"+str(frm)+".jpeg", t=frm)
 
     print("It is done")
->>>>>>> test_running
