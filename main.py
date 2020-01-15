@@ -1,23 +1,64 @@
 from moviepy.editor import VideoFileClip
-import os
+import shutil, os
 import time
 from utils.clrs import welcome
 from nudenet import NudeClassifier
 import multiprocessing
 from utils.cut import image_cut
-from utils.clsfy import cls_fr
 from utils.clrs import color
+#adding a comment
 
+<<<<<<< HEAD
 
 def lop(lis, classifier, location, info_lis):
+=======
+def clsfy(location, classifier, how_safe):
+    # this method is to classify the frames
+    data = classifier.classify(location)
+    #change this variable as per the accuracy of the mode
+
+
+    if data[location]['safe'] < how_safe:
+        color.red("frame: "+ str(location) + " safe: "+str(data[location]['safe']))
+        #shutil.move(location, '../tmp')
+        return True
+    else:
+        color.green("frame: "+str(location)+" safe : "+str(data[location]['safe']))
+        return False
+
+def lop(lis, classifier, location):
+    info_lis= []
+>>>>>>> test_running
     for x in lis:
-        if clsfy(loc, classifier):
+        loc = location + str(x)
+        if clsfy(loc, classifier, 0.2):
             info_lis.append(loc)
+    return info_lis
+def cals(frame, classifier, vclip):
+    vclip.save_frame("../accu/"+str(frame)+"-0.jpeg", t=frame)
+    vclip.save_frame("../accu/"+str(frame)+"-1.jpeg", t=frame+0.1)
+    vclip.save_frame("../accu/"+str(frame)+"-2.jpeg", t=frame+0.2)
+    vclip.save_frame("../accu/"+str(frame)+"-3.jpeg", t=frame+0.5)
+    vclip.save_frame("../accu/"+str(frame)+"-4.jpeg", t=frame+0.7)
+    vclip.save_frame("../accu/"+str(frame)+"-5.jpeg", t=frame+0.9)
+
+    caliberate = 0
+    for x in range(6):
+        loc = "../accu/"+str(frame)+"-"+str(x)+".jpeg"
+        if clsfy(loc, classifier, 0.1):
+            caliberate += 1
+
+    if (caliberate/6) > 0.5:
+        return True
+    else:
+        return False
+
 
 if __name__ == "__main__":
 
     welcome.welc()
     # and the main begins
+
     started_at = time.time()
     color.red("The main started at "+str(time.ctime()))
 
@@ -69,9 +110,59 @@ if __name__ == "__main__":
     p4.join()
 
     stopped_at = time.time()
+    # later code is to classify the elements
 
     color.red("The time elapsed : "+str(stopped_at - started_at))
+    started_at = time.time()
+    color.yellow("\n\n--->The classification started  : "+str(started_at))
+    classifier = NudeClassifier("../classifier_model")
 
+<<<<<<< HEAD
 #need to write 
 
     # later code is to classify the elements
+=======
+    img_lis = os.listdir('../temp/')
+    info_lis = []
+
+    info_lis = lop(img_lis, classifier, '../temp/')
+
+    stopped_at = time.time()
+    color.yellow("\n\n---> classification took : "+str(stopped_at-started_at))
+
+    #info_lis has all the potential nsfw frames
+    print(info_lis)
+    frame_values = []
+    for img_loc in info_lis:
+        #frame_sec is to get the second on which the frame was retrieved
+        #handle exceptions here
+        x = image_cut.frame_sec(img_loc)
+        if x == None:
+            pass
+        else:
+            frame_values.append(x)
+
+    print(frame_values)
+
+    # now we need to select the frames which are potentially nsfw
+
+    try:
+        os.mkdir("../accu/")
+    except:
+        pass
+
+    try:
+        os.mkdir("../final/")
+    except:
+        pass
+
+    updated_info_lis= []
+    for frame in frame_values:
+        if cals(frame, classifier, vclip):
+            updated_info_lis.append(frame)
+
+    for frm in updated_info_lis:
+        vclip.save_frame("../final/"+str(frm)+".jpeg", t=frm)
+
+    print("It is done")
+>>>>>>> test_running
