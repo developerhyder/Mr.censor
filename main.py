@@ -6,13 +6,39 @@ from nudenet import NudeClassifier
 import multiprocessing
 from utils.cut import image_cut
 from utils.clrs import color
+from flask import Flask, render_template, request
 #adding a comment
 
+fname = None
+debug_console= None
+app = Flask(__name__)
+
+
+@app.route("/")
+def index():
+    global debug_console
+    global fname
+    run_meth(fname)
+    return "hello"
+
+@app.route("/confirm", methods= ['POST', 'GET'])
+def somename():
+    global fname
+    if request.method == 'POST':
+        f = request.files['file']
+        f.save(f.filename)
+        #f.filename is a str
+        fname= f.filename
+        return render_template('page2.html', val= f.filename)
+
+@app.route("/result")
+def index2():
+    return render_template("page1.html")
+
 def clsfy(location, classifier, how_safe):
-    # this method is to classify the frames
+    #this method is to classify the frames
     data = classifier.classify(location)
     #change this variable as per the accuracy of the mode
-
 
     if data[location]['safe'] < how_safe:
         color.red("frame: "+ str(location) + " safe: "+str(data[location]['safe']))
@@ -48,22 +74,16 @@ def cals(frame, classifier, vclip):
     else:
         return False
 
-
-if __name__ == "__main__":
-
-    welcome.welc()
-    # and the main begins
-
+def run_meth(fname):
     started_at = time.time()
     color.red("The main started at "+str(time.ctime()))
-
-    var = input(color.green_str("Enter the path (for now type something): "))
-
-    #later on clip_loc = var
-    clip_loc = "/root/tvf/got.mp4"
+    debug_console = "The program has begun it will take some time"
+      #later on clip_loc = var
+    clip_loc = fname
 
     vclip = VideoFileClip(clip_loc)
     color.red("The duration of the clip : " + str(vclip.duration))
+    debug_console= "FPS :" + str(vclip.fps)
     color.red("FPS :" + str(vclip.fps))
 
     duration = int(vclip.duration)
@@ -74,7 +94,7 @@ if __name__ == "__main__":
         pass
 
     print("Main process : ",os.getpid())
-
+    debug_console = "started fetching frames"
     start = 0
     end = int(duration/4)
     step = 5
@@ -103,9 +123,9 @@ if __name__ == "__main__":
     p2.join()
     p3.join()
     p4.join()
-
+    debug_console= "finished fetching frames"
     stopped_at = time.time()
-    # later code is to classify the elements
+      #later code is to classify the elements
 
     color.red("The time elapsed : "+str(stopped_at - started_at))
     started_at = time.time()
@@ -114,28 +134,24 @@ if __name__ == "__main__":
 
     img_lis = os.listdir('../temp/')
     info_lis = []
-
+    debug_console = "started classification"
     info_lis = lop(img_lis, classifier, '../temp/')
 
     stopped_at = time.time()
     color.yellow("\n\n---> classification took : "+str(stopped_at-started_at))
-
-    #info_lis has all the potential nsfw frames
+    debug_console = "---> classification took : "+str(stopped_at-started_at)
+      #info_lis has all the potential nsfw frames
     print(info_lis)
     frame_values = []
     for img_loc in info_lis:
-        #frame_sec is to get the second on which the frame was retrieved
-        #handle exceptions here
-        x = image_cut.frame_sec(img_loc)
-        if x == None:
-            pass
-        else:
-            frame_values.append(x)
-
-    print(frame_values)
-
-    # now we need to select the frames which are potentially nsfw
-
+         #frame_sec is to get the second on which the frame was retrieved
+         #handle exceptions here
+         x = image_cut.frame_sec(img_loc)
+         if x == None:
+             pass
+         else:
+             frame_values.append(x)
+      #now we need to select the frames which are potentially nsfw
     try:
         os.mkdir("../accu/")
     except:
@@ -155,3 +171,10 @@ if __name__ == "__main__":
         vclip.save_frame("../final/"+str(frm)+".jpeg", t=frm)
 
     print("It is done")
+    debug_console= "It is done"
+
+if __name__ == "__main__":
+
+    welcome.welc()
+    app.run(debug= True)
+    #and the main begins
