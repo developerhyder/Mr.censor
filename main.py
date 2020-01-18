@@ -41,8 +41,8 @@ def somename():
         f.save(os.path.join("../vid/",f.filename))
         #f.filename is a str
         fname = f.filename
-        procss = multiprocessing.Process(target= run_meth, args=(fname,))
-        procss.start()
+        run_meth(fname)
+        # create os method and run the python script from shell we have no other choice here
         return render_template('page2.html', val= f.filename)
 
 @app.route("/result")
@@ -161,7 +161,6 @@ def run_meth(fname):
     started_at = time.time()
     color.yellow("\n\n--->The classification started  : "+str(started_at))
     classifier = NudeClassifier("../classifier_model")
-
     img_lis = os.listdir('../temp/')
     info_lis = []
     debug_console = "started classification"
