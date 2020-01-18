@@ -20,6 +20,7 @@ def index():
     global fname
     run_meth(fname)
     #i will resume from here
+    #change the location where you store the vid file
     return "hello"
 
 @app.route("/confirm", methods= ['POST', 'GET'])
