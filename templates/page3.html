@@ -1,9 +1,23 @@
 <html>
 <head>
-  <script type="text/javascript" src="{{ url_for('static', filename='hello.js')}}">
+  <script type="text/javascript" src="{{ url_for('static', filename='hello.js') }}">
   </script>
-<head>
+  <style>
+    body {
+      background-image:url({{url_for('static', filename= 'wall2.jpeg')}});
+      color:#FFFFFF;
+    }
+    p1 {
+      font-family:Helvetica;
+      font-size:120px;
+    }
+    p2 {
+      font-family:Helvetica;
+      font-size:40px;
+    }
+  </style>
+</head>
 <body>
-  <p> hello {{ val }} </p>
+  <p2> {{ val }}</p2>
 </body>
 </html>

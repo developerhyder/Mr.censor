@@ -1,5 +1,5 @@
 from moviepy.editor import VideoFileClip
-import shutil, os
+import shutil, os, sys
 import time
 from utils.clrs import welcome
 from nudenet import NudeClassifier
@@ -18,19 +18,31 @@ app = Flask(__name__)
 def index():
     global debug_console
     global fname
-    run_meth(fname)
+    #run_meth(fname)
     #i will resume from here
-    #change the location where you store the vid file
-    return "hello"
+    try:
+        f = open("filebuff.txt", "r")
+    except:
+        color.red("File not created so im shutting down the entire program !!")
+        sys.exit()
+        pass
+    file_data = f.read()
+    f.close()
+    return render_template('page3.html', val= file_data )
 
 @app.route("/confirm", methods= ['POST', 'GET'])
 def somename():
     global fname
+    global procss
     if request.method == 'POST':
         f = request.files['file']
-        f.save(f.filename)
+
+
+        f.save(os.path.join("../vid/",f.filename))
         #f.filename is a str
-        fname= f.filename
+        fname = f.filename
+        procss = multiprocessing.Process(target= run_meth, args=(fname,))
+        procss.start()
         return render_template('page2.html', val= f.filename)
 
 @app.route("/result")
@@ -77,11 +89,20 @@ def cals(frame, classifier, vclip):
         return False
 
 def run_meth(fname):
+    try:
+        f = open("filebuff.txt", "a")
+    except:
+        color.red("File not created so im shutting down the entire program !!")
+        sys.exit()
+        pass
     started_at = time.time()
+
     color.red("The main started at "+str(time.ctime()))
     debug_console = "The program has begun it will take some time"
+    f.write("--> "+debug_console+"\n")
+    f.close()
       #later on clip_loc = var
-    clip_loc = fname
+    clip_loc = "../vid/"+fname
 
     vclip = VideoFileClip(clip_loc)
     color.red("The duration of the clip : " + str(vclip.duration))
@@ -97,6 +118,10 @@ def run_meth(fname):
 
     print("Main process : ",os.getpid())
     debug_console = "started fetching frames"
+
+    f = open("filebuff.txt", "a")
+    f.write("--> "+debug_console+"\n")
+    f.close()
     start = 0
     end = int(duration/4)
     step = 5
@@ -126,6 +151,9 @@ def run_meth(fname):
     p3.join()
     p4.join()
     debug_console= "finished fetching frames"
+    f = open("filebuff.txt", "a")
+    f.write("--> "+debug_console+"\n")
+    f.close()
     stopped_at = time.time()
       #later code is to classify the elements
 
@@ -137,12 +165,18 @@ def run_meth(fname):
     img_lis = os.listdir('../temp/')
     info_lis = []
     debug_console = "started classification"
+    f = open("filebuff.txt", "a")
+    f.write("--> "+debug_console+"\n")
+    f.close()
     info_lis = lop(img_lis, classifier, '../temp/')
 
     stopped_at = time.time()
     color.yellow("\n\n---> classification took : "+str(stopped_at-started_at))
     debug_console = "---> classification took : "+str(stopped_at-started_at)
       #info_lis has all the potential nsfw frames
+    f = open("filebuff.txt", "a")
+    f.write("--> "+debug_console+"\n")
+    f.close()
     print(info_lis)
     frame_values = []
     for img_loc in info_lis:
@@ -153,7 +187,6 @@ def run_meth(fname):
              pass
          else:
              frame_values.append(x)
-      #now we need to select the frames which are potentially nsfw
     try:
         os.mkdir("../accu/")
     except:
@@ -174,9 +207,19 @@ def run_meth(fname):
 
     print("It is done")
     debug_console= "It is done"
+    f = open("filebuff.txt", "a")
+    f.write("--> "+debug_console+"\n")
+    f.close()
+    #os.system("firefox -new-tab 'http://127.0.0.1:5000/'")
 
 if __name__ == "__main__":
-
+    global procss
     welcome.welc()
+    try:
+        os.mkdir("../vid/")
+    except:
+        pass
     app.run(debug= True)
+    app.config['UPLOAD_FOLDER'] = "../vid"
+    procss.join()
     #and the main begins
