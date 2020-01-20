@@ -150,6 +150,3 @@ if __name__ == "__main__":
     color.purple("The Following seconds in the video have NSFW content: ")
     for nsfw in p_NSFW:
         print("-->", nsfw)
-
-    
-    #and the main begins
