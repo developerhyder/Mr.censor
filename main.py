@@ -52,7 +52,7 @@ def run_meth(fname):
 
     color.red("The main started at "+str(time.ctime()))
       #later on clip_loc = var
-    clip_loc = "../vid/"+fname
+    clip_loc = fname
 
     vclip = VideoFileClip(clip_loc)
     color.red("The duration of the clip : " + str(vclip.duration))
@@ -139,11 +139,17 @@ def run_meth(fname):
         vclip.save_frame("../final/"+str(frm)+".jpeg", t=frm)
 
     print("It is done")
-    debug_console= "It is done"
     #os.system("firefox -new-tab 'http://127.0.0.1:5000/'")
+    return updated_info_lis
 
 if __name__ == "__main__":
     welcome.welc()
     # change the folder path when you build the front end
-    run_meth("/root/tvf/got.mp4")
+    p_NSFW = []
+    p_NSFW= run_meth("/root/tvf/got.mp4")
+    color.purple("The Following seconds in the video have NSFW content: ")
+    for nsfw in p_NSFW:
+        print("-->", nsfw)
+
+    
     #and the main begins
