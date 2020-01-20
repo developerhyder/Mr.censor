@@ -1,0 +1,35 @@
+<html>
+    <head>
+    <title>Mr. Censor</title>
+    <style>
+      body {
+        background-image:url({{url_for('static', filename= 'wall2.jpeg')}});
+        color:#FFFFFF;
+      }
+      p1 {
+        font-family:Helvetica;
+        font-size:120px;
+      }
+      p2 {
+        font-family:Helvetica;
+        font-size:40px;
+      }
+      p3 {
+        font-family:Helvetica;
+        font-size:30px;
+      }
+    </style>
+    </head>
+    <body>
+      <center><br><br><br><p1>Mr. Censor</p1><br><br><br>
+        <p2>A Censorship Plugin</p2><br><br>
+      </center>
+      <center>
+        <p3> Select the file </p3><br><br>
+        <form action="http://127.0.0.1:5000/confirm" method="POST" enctype="multipart/form-data">
+            <p3><b>File<b>:<input name="file" type="file" ><br><br><p3>
+            <input type="submit" value="Censor It">
+        </form>
+      </center>
+    </body>
+</html>
