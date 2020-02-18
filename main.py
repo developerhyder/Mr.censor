@@ -12,7 +12,6 @@ def clsfy(location, classifier, how_safe):
     #this method is to classify the frames
     data = classifier.classify(location)
     #change this variable as per the accuracy of the mode
-
     if data[location]['safe'] < how_safe:
         color.red("frame: "+ str(location) + " safe: "+str(data[location]['safe']))
         #shutil.move(location, '../tmp')
@@ -67,6 +66,7 @@ def run_meth(fname):
         pass
 
     print("Main process : ",os.getpid())
+    #step is basically used to jump 5 seconds at once
     start = 0
     end = int(duration/4)
     step = 5
@@ -140,7 +140,22 @@ def run_meth(fname):
 
     print("It is done")
     #os.system("firefox -new-tab 'http://127.0.0.1:5000/'")
-    return updated_info_lis
+    #now we have the potential NSFW but we need to increase the accuracy
+    #the best way to do it is to make sure that we find nsfw in the next second as well
+
+    truly_nsfw = []
+
+    try:
+        os.mkdir("../final_nsfw/")
+    except:
+        pass
+
+    for frm in updated_info_lis:
+        if cals(frm+1, classifier, vclip):
+            truly_nsfw.append(frm)
+            vclip.save_frame("../final_nsfw/"+str(frm)+".jpeg", t=frm)
+
+    return truly_nsfw
 
 if __name__ == "__main__":
     welcome.welc()
@@ -149,4 +164,4 @@ if __name__ == "__main__":
     p_NSFW= run_meth("/root/tvf/got.mp4")
     color.purple("The Following seconds in the video have NSFW content: ")
     for nsfw in p_NSFW:
-        print("-->", nsfw)
+        color.red("|\n\t-->"+str(nsfw))
