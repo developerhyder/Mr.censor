@@ -108,50 +108,6 @@ if __name__ == "__main__":
     # later code is to classify the elements
 
     color.red("The time elapsed : "+str(stopped_at - started_at))
-    # started_at = time.time()
-    # color.yellow("\n\n--->The classification started  : "+str(started_at))
-    # classifier = NudeClassifier("../classifier_model")
-    #
-    # img_lis = os.listdir('../temp/')
-    # info_lis = []
-    #
-    # info_lis = lop(img_lis, classifier, '../temp/')
-    #
-    # stopped_at = time.time()
-    # color.yellow("\n\n---> classification took : "+str(stopped_at-started_at))
-    #
-    # #info_lis has all the potential nsfw frames
-    # print(info_lis)
-    # frame_values = []
-    # for img_loc in info_lis:
-    #     #frame_sec is to get the second on which the frame was retrieved
-    #     #handle exceptions here
-    #     x = image_cut.frame_sec(img_loc)
-    #     if x == None:
-    #         pass
-    #     else:
-    #         frame_values.append(x)
-    #
-    # print(frame_values)
-    #
-    # # now we need to select the frames which are potentially nsfw
-    #
-    # try:
-    #     os.mkdir("../accu/")
-    # except:
-    #     pass
-    #
-    # try:
-    #     os.mkdir("../final/")
-    # except:
-    #     pass
-    #
-    # updated_info_lis= []
-    # for frame in frame_values:
-    #     if cals(frame, classifier, vclip):
-    #         updated_info_lis.append(frame)
-    #
-    # for frm in updated_info_lis:
-    #     vclip.save_frame("../final/"+str(frm)+".jpeg", t=frm)
+
 
     print("It is done")
